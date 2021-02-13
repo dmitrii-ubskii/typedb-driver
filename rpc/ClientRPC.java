@@ -25,8 +25,8 @@ import grakn.common.concurrent.NamedThreadFactory;
 import io.grpc.Channel;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.netty.channel.nio.NioEventLoopGroup;
 
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class ClientRPC implements GraknClient {
@@ -39,7 +39,7 @@ public class ClientRPC implements GraknClient {
     public ClientRPC(String address) {
         channel = ManagedChannelBuilder
                 .forTarget(address)
-                .executor(Executors.newFixedThreadPool(THREAD_POOL_SIZE, new NamedThreadFactory(THREAD_POOL_NAME)))
+                .executor(new NioEventLoopGroup(THREAD_POOL_SIZE, NamedThreadFactory.create(THREAD_POOL_NAME)))
                 .usePlaintext()
                 .build();
         databases = new DatabaseManagerRPC(channel);

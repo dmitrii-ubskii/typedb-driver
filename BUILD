@@ -61,13 +61,13 @@ java_library(
         "@maven//:io_grpc_grpc_core",
         "@maven//:io_grpc_grpc_stub",
         "@maven//:io_grpc_grpc_api",
-        "@maven//:org_slf4j_slf4j_api"
+        "@maven//:io_netty_netty_all",
+        "@maven//:org_slf4j_slf4j_api",
     ],
     runtime_deps = [
         "@maven//:ch_qos_logback_logback_classic",
         "@maven//:ch_qos_logback_logback_core",
         "@maven//:io_grpc_grpc_netty",
-        "@maven//:io_netty_netty_all",
         "@maven//:io_netty_netty_tcnative_boringssl_static",
     ],
     resources = ["LICENSE"],
