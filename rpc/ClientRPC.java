@@ -21,19 +21,27 @@ package grakn.client.rpc;
 
 import grakn.client.GraknClient;
 import grakn.client.GraknOptions;
+import grakn.common.concurrent.NamedThreadFactory;
 import io.grpc.Channel;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class ClientRPC implements GraknClient {
 
+    private static final int THREAD_POOL_SIZE = Runtime.getRuntime().availableProcessors();
+    private static final String THREAD_POOL_NAME = "grakn-client-rpc";
     private final ManagedChannel channel;
     private final DatabaseManagerRPC databases;
 
     public ClientRPC(String address) {
-        channel = ManagedChannelBuilder.forTarget(address).usePlaintext().build();
+        channel = ManagedChannelBuilder
+                .forTarget(address)
+                .executor(Executors.newFixedThreadPool(THREAD_POOL_SIZE, new NamedThreadFactory(THREAD_POOL_NAME)))
+                .usePlaintext()
+                .build();
         databases = new DatabaseManagerRPC(channel);
     }
 
