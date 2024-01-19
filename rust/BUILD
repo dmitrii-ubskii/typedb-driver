@@ -84,7 +84,7 @@ assemble_crate(
     license_file = "//:LICENSE",
     readme_file = ":README.md",
     repository = "https://github.com/vaticle/typedb-driver",
-    snapshot = deployment['crate']['snapshot'],
+    snapshot = 'https://repo.typedb.com/public/public-snapshot/cargo/index',
     target = ":typedb_driver",
     universe_manifests = ["@vaticle_dependencies//library/crates:Cargo.toml"],
     crate_features = { "sync": [] },
