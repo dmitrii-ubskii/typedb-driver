@@ -167,16 +167,18 @@ error_messages! { ConnectionError
         23: "Invalid URL '{address}': missing port.",
     AddressTranslationMismatch { unknown: HashSet<Address>, unmapped: HashSet<Address> } =
         24: "Address translation map does not match the server's advertised address list. User-provided servers not in the advertised list: {unknown:?}. Advertised servers not mapped by user: {unmapped:?}.",
+    ConnectionTimedOut =
+        25: "Connection to the server timed out."
     ValueTimeZoneNameNotRecognised { time_zone: String } =
-        25: "Time zone provided by the server has name '{time_zone}', which is not an officially recognized timezone.",
+        26: "Time zone provided by the server has name '{time_zone}', which is not an officially recognized timezone.",
     ValueTimeZoneOffsetNotRecognised { offset: i32 } =
-        26: "Time zone provided by the server has numerical offset '{offset}', which is not recognised as a valid value for offset in seconds.",
+        27: "Time zone provided by the server has numerical offset '{offset}', which is not recognised as a valid value for offset in seconds.",
     ValueStructNotImplemented =
-        27: "Struct valued responses are not yet supported by the driver.",
+        28: "Struct valued responses are not yet supported by the driver.",
     ListsNotImplemented =
-        28: "Lists are not yet supported by the driver.",
+        29: "Lists are not yet supported by the driver.",
     UnexpectedKind { kind: i32 } =
-        14: "Unexpected kind in message received from server: {kind}. This is either a version compatibility issue or a bug.",
+        30: "Unexpected kind in message received from server: {kind}. This is either a version compatibility issue or a bug.",
 }
 
 error_messages! { InternalError
@@ -363,6 +365,8 @@ impl From<Status> for Error {
                 })
             } else if status.code() == Code::Unimplemented {
                 Self::Connection(ConnectionError::RPCMethodUnavailable { message: status.message().to_owned() })
+            } else if status.code() == Code::Cancelled && status.message() == "Timeout expired" {
+                Self::Connection(ConnectionError::ConnectionTimedOut)
             } else {
                 Self::from_message(status.message())
             }
