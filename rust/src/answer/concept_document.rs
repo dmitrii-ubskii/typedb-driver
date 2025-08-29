@@ -19,6 +19,8 @@
 
 use std::{borrow::Cow, collections::HashMap, sync::Arc};
 
+use serde::Serialize;
+
 use super::{QueryType, JSON};
 use crate::concept::{
     value::Struct, Attribute, AttributeType, Concept, EntityType, Kind, RelationType, RoleType, Value, ValueType,
@@ -193,4 +195,13 @@ fn json_struct(struct_: Struct) -> JSON {
 
 fn json_kind(kind: Kind) -> JSON {
     JSON::String(Cow::Borrowed(kind.name()))
+}
+
+impl Serialize for ConceptDocument {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        self.clone().into_json().serialize(serializer)
+    }
 }
