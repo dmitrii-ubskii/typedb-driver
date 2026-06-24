@@ -863,7 +863,7 @@ workflows:
       - deploy-snapshot-windows-x86_64:
           filters:
             branches:
-              only: [master]
+              only: [master, one-off/set-cargo-bazel-generator-url-ci]
 
       - deploy-snapshot-any:
           filters:
@@ -926,7 +926,7 @@ workflows:
       - test-snapshot-windows-x86_64:
           filters:
             branches:
-              only: [master]
+              only: [master, one-off/set-cargo-bazel-generator-url-ci]
           requires:
             - deploy-snapshot-windows-x86_64
             - deploy-snapshot-any
